@@ -1,3 +1,14 @@
+```
+██╗   ██╗██╗ █████╗      ██╗███████╗██████╗  ██████╗      █████╗ ██████╗ ██████╗ 
+██║   ██║██║██╔══██╗     ██║██╔════╝██╔══██╗██╔═══██╗    ██╔══██╗██╔══██╗██╔══██╗
+██║   ██║██║███████║     ██║█████╗  ██████╔╝██║   ██║    ███████║██████╔╝██████╔╝
+╚██╗ ██╔╝██║██╔══██║██   ██║██╔══╝  ██╔══██╗██║   ██║    ██╔══██║██╔═══╝ ██╔═══╝ 
+ ╚████╔╝ ██║██║  ██║╚█████╔╝███████╗██║  ██║╚██████╔╝    ██║  ██║██║     ██║     
+  ╚═══╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚═╝  ╚═╝╚═╝     ╚═╝     
+                               ╔═══════════════════╗
+                               ║  🧳 → 🗺️ → 📍 → ✨ 
+                               ╚═══════════════════╝
+```
 # Viajero App – Sistema de Monitoreo en Tiempo Real del Transporte Público
 
 **Viajero App** es una aplicación enfocada en transformar la experiencia del transporte público mediante el uso de herramientas de monitoreo en tiempo real.  
@@ -59,3 +70,5 @@ Al mismo tiempo, las autoridades necesitan **mecanismos más efectivos de superv
 Actualmente, **Viajero App** se encuentra en fase de diseño y conceptualización.  
 
 ---
+                             
+
