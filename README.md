@@ -58,7 +58,7 @@ El objetivo es sentar las bases de un sistema que permita **registrar rutas, par
 
 ##  Cómo usar la demo
 
-1. Abre el proyecto en tu navegador (`index.html`).  
+1. Abre el proyecto en tu navegador mediante el siguiente link (`[Viajero app Demo](http://viajeroapp-demo.surge.sh/)`).  
 2. En el formulario lateral:
    - Ingresa nombre, número, horarios y frecuencia de la ruta.  
    - Añade paradas con clic en el mapa o manualmente.  
