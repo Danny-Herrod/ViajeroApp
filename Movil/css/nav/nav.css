@@ -1,0 +1,256 @@
+/* Bottom Navigation Container */
+.bottom-nav-container {
+    position: fixed;
+    bottom: 10px; /* Más abajo */
+    left: 0;
+    right: 0;
+    padding: 0 20px; /* Solo padding lateral */
+    background: transparent;
+    z-index: 9999;
+}
+
+/* Estilos de la barra de navegación */
+.navigation-container {
+    display: flex;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.nav-bar {
+    background: #FFBB00;
+    border-radius: 50px;
+    border: #ffffff 5px solid;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: fit-content;
+    gap: 12px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    color: #ffffff;
+    overflow: visible;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.nav-item.active {
+    background: white;
+    color: #FF8400;
+    width: 130px;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+    justify-content: center;
+}
+
+.nav-item:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.nav-item svg {
+    width: 22px;
+    height: 22px;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Cuando está activo, mueve el ícono para hacer espacio al texto */
+.nav-item.active svg {
+    left: 35px; /* Posición fija calculada para el balance visual */
+    transform: translateY(-50%);
+}
+
+.nav-label {
+    font-size: 20px;
+    font-weight: 800;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition-delay: 0.1s;
+    white-space: nowrap;
+    position: absolute;
+    left: 65px; /* Posición fija para el texto */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.nav-item.active .nav-label {
+    opacity: 1;
+}
+
+.nav-item:not(.active)::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.nav-item:not(.active):hover::after {
+    opacity: 1;
+}
+
+.nav-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.6s ease;
+}
+
+.nav-item.clicked::before {
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+}
+
+/* Responsive adjustments - Mejorado para mejor legibilidad */
+@media (max-width: 768px) {
+    .bottom-nav-container {
+        padding: 0 2.5%; /* 2.5% de padding a cada lado = 95% de ancho útil */
+    }
+    
+    .nav-bar {
+        width: 100%; /* Ocupa todo el ancho disponible */
+        justify-content: space-around; /* Distribuye los elementos uniformemente */
+        gap: 0;
+        padding: 12px 8px;
+    }
+    
+    .nav-item {
+        width: 60px; /* Aumentado de 52px a 60px */
+        height: 60px; /* Aumentado de 52px a 60px */
+    }
+    
+    .nav-item.active {
+        width: 140px; /* Aumentado de 120px a 140px */
+    }
+    
+    .nav-item svg {
+        width: 26px; /* Aumentado de 20px a 26px */
+        height: 26px; /* Aumentado de 20px a 26px */
+    }
+    
+    .nav-item.active svg {
+        left: 35px; /* Ajustado para el nuevo ancho */
+    }
+    
+    .nav-item.active .nav-label {
+        left: 68px; /* Ajustado para el nuevo ancho */
+        font-size: 16px; /* Aumentado de 14px a 16px */
+        font-weight: 700; /* Añadido para mejor legibilidad */
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-item {
+        width: 56px; /* Mantiene un buen tamaño para pantallas pequeñas */
+        height: 56px;
+    }
+    
+    .nav-item.active {
+        width: 130px; /* Ajustado proporcionalmente */
+    }
+    
+    .nav-item svg {
+        width: 24px; /* Buen balance entre tamaño y espacio */
+        height: 24px;
+    }
+    
+    .nav-item.active svg {
+        left: 32px;
+    }
+    
+    .nav-item.active .nav-label {
+        left: 62px;
+        font-size: 15px; /* Tamaño legible pero no excesivo */
+        font-weight: 700;
+    }
+}
+
+@media (max-width: 375px) {
+    .nav-item {
+        width: 54px; /* Aumentado de 48px a 54px */
+        height: 54px; /* Aumentado de 48px a 54px */
+    }
+    
+    .nav-item.active {
+        width: 125px; /* Aumentado de 110px a 125px */
+    }
+    
+    .nav-item svg {
+        width: 22px; /* Aumentado de 18px a 22px */
+        height: 22px; /* Aumentado de 18px a 22px */
+    }
+    
+    .nav-item.active svg {
+        left: 30px; /* Ajustado para el nuevo ancho */
+    }
+    
+    .nav-item.active .nav-label {
+        left: 58px; /* Ajustado para el nuevo ancho */
+        font-size: 14px; /* Aumentado de 13px a 14px */
+        font-weight: 700; /* Añadido para mejor legibilidad */
+    }
+}
+
+/* Media query adicional para pantallas muy pequeñas */
+@media (max-width: 320px) {
+    .bottom-nav-container {
+        padding: 0 1.5%;
+    }
+    
+    .nav-item {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .nav-item.active {
+        width: 115px;
+    }
+    
+    .nav-item svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .nav-item.active svg {
+        left: 28px;
+    }
+    
+    .nav-item.active .nav-label {
+        left: 52px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+}

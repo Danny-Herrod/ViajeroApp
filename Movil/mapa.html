@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Transporte - Jinotega</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="./css/nav/nav.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+             font-family: 'Nunito', sans-serif;
+            background: #f0f0f0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Filtro para hacer el mapa gris */
+        .leaflet-container {
+            filter: none;
+        }
+
+        /* Modal de ubicación fuera de Jinotega */
+        .location-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .location-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 350px;
+            margin: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #FF9800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-text {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .modal-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .modal-button:hover {
+            background: #45a049;
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Cards de rutas */
+        .route-cards {
+            position: absolute;
+            bottom: 160px;
+            left: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            flex: 1;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            border: 3px solid;
+        }
+
+        .route-card.green {
+            border-color: #4CAF50;
+        }
+
+        .route-card.orange {
+            border-color: #FF9800;
+        }
+
+        .route-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .route-title {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 4px 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .route-card.green .route-title {
+            background: #4CAF50;
+        }
+
+        .route-card.orange .route-title {
+            background: #FF9800;
+        }
+
+        .units-counter {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .route-card.orange .units-counter {
+            background: rgba(255, 152, 0, 0.1);
+            border: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        .units-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .route-info {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .route-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+
+        .route-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .location-icon {
+            width: 12px;
+            height: 12px;
+            background: #666;
+            border-radius: 2px;
+        }
+
+        .location-text {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .location-value {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Líneas de ruta personalizadas */
+        .route-line-green {
+            stroke: #4CAF50 !important;
+            stroke-width: 4 !important;
+        }
+
+        .route-line-orange {
+            stroke: #FF9800 !important;
+            stroke-width: 4 !important;
+        }
+
+        /* Marcadores personalizados */
+        .custom-marker {
+            background: white;
+            border: 3px solid #FF5722;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-marker.red {
+            border-color: #FF5722;
+            background: #FF5722;
+        }
+
+        .custom-marker.white {
+            border-color: #ddd;
+            background: white;
+        }
+
+        .custom-marker.user {
+            border-color: #2196F3;
+            background: #2196F3;
+            box-shadow: 0 0 0 10px rgba(33, 150, 243, 0.3);
+            animation: userPulse 2s infinite;
+        }
+
+        @keyframes userPulse {
+            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+        }
+
+        /* Estilos para ocultar controles de Leaflet no deseados */
+        .leaflet-control-container {
+            display: none;
+        }
+
+        /* Personalizar popup */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+       
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Obteniendo tu ubicación...</div>
+    </div>
+
+    <!-- Modal para ubicaciones fuera de Jinotega -->
+    <div class="location-modal" id="locationModal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <svg width="40" height="40" fill="white" viewBox="0 0 24 24">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+            </div>
+            <h2 class="modal-title">Versión Beta</h2>
+            <p class="modal-text">Actualmente solo tenemos rutas disponibles para la ciudad de Jinotega. Te llevaremos allí para que puedas ver el sistema de transporte.</p>
+            <button class="modal-button" onclick="goToJinotega()">Ver Jinotega</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="map-container">
+            <div id="map"></div>
+            
+            <!-- Cards de rutas -->
+            <div class="route-cards">
+                <div class="route-card green">
+                    <div class="route-header">
+                        <div class="route-title">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                            </svg>
+                            Ruta 1
+                        </div>
+                    </div>
+                    <div class="route-info">
+                        <div class="route-status">
+                            <span>Estado:</span>
+                            <div class="status-dot"></div>
+                        </div>
+                        <div class="route-location">
+                            <div class="location-icon"></div>
+                            <div>
+                                <div class="location-text">Salida:</div>
+                                <div class="location-value">Villa Valencia</div>
+                            </div>
+                        </div>
+                        <div class="route-location">
+                            <div class="location-icon"></div>
+                            <div>
+                                <div class="location-text">Destino:</div>
+                                <div class="location-value">Cuatro Esquina</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="units-counter">
+                        <div class="units-dot"></div>
+                        <span id="greenRouteUnits">3 unidades</span>
+                    </div>
+                </div>
+
+                <div class="route-card orange">
+                    <div class="route-header">
+                        <div class="route-title">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                            </svg>
+                            Ruta 2
+                        </div>
+                    </div>
+                    <div class="route-info">
+                        <div class="route-status">
+                            <span>Estado:</span>
+                            <div class="status-dot"></div>
+                        </div>
+                        <div class="route-location">
+                            <div class="location-icon"></div>
+                            <div>
+                                <div class="location-text">Salida:</div>
+                                <div class="location-value">Apanas</div>
+                            </div>
+                        </div>
+                        <div class="route-location">
+                            <div class="location-icon"></div>
+                            <div>
+                                <div class="location-text">Destino:</div>
+                                <div class="location-value">Tanque Rojo</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="units-counter">
+                        <div class="units-dot"></div>
+                        <span id="orangeRouteUnits">2 unidades</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav-container">
+            <div class="navigation-container">
+                <nav class="nav-bar">
+                    <!-- Inicio -->
+                    <div class="nav-item" data-nav="home" data-label="Home">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
+                        <span class="nav-label">Inicio</span>
+                    </div>
+                    
+                    <!-- Ubicación -->
+                    <div class="nav-item active" data-nav="location" data-label="Location">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <span class="nav-label">Mapa</span>
+                    </div>
+                    
+                    <!-- Persona caminando -->
+                    <div class="nav-item" data-nav="walk" data-label="Walk">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L8 8.5V13h2V9.6l-.2-.7z"/>
+                        </svg>
+                        <span class="nav-label">Viajar</span>
+                    </div>
+                    
+                    <!-- Bus -->
+                    <div class="nav-item" data-nav="bus" data-label="Bus">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                        </svg>
+                        <span class="nav-label">Buses</span>
+                    </div>
+                    
+                    <!-- Ajustes -->
+                    <div class="nav-item" data-nav="settings" data-label="Settings">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"/>
+                        </svg>
+                        <span class="nav-label">Ajustes</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script>
+        let map;
+        let userMarker;
+        let userLocation = null;
+        
+        // Coordenadas de Jinotega (centro aproximado)
+        const jinotegaCenter = [13.0878, -86.0010];
+        const jinotegaBounds = {
+            north: 13.2,
+            south: 12.9,
+            east: -85.8,
+            west: -86.3
+        };
+
+        // Función para verificar si una coordenada está en Jinotega
+        function isInJinotega(lat, lng) {
+            return lat <= jinotegaBounds.north && 
+                   lat >= jinotegaBounds.south && 
+                   lng <= jinotegaBounds.east && 
+                   lng >= jinotegaBounds.west;
+        }
+
+        // Función para mostrar el modal
+        function showLocationModal() {
+            const modal = document.getElementById('locationModal');
+            modal.classList.add('show');
+        }
+
+        // Función para ir a Jinotega
+        function goToJinotega() {
+            const modal = document.getElementById('locationModal');
+            modal.classList.remove('show');
+            
+            // Centrar el mapa en Jinotega
+            map.setView(jinotegaCenter, 14);
+            
+            // Simular ubicación en Jinotega para propósitos de demo
+            addUserMarker(jinotegaCenter[0], jinotegaCenter[1]);
+        }
+
+        // Función para obtener la geolocalización
+        function getUserLocation() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            if (!navigator.geolocation) {
+                console.log('Geolocalización no soportada');
+                loadingOverlay.classList.add('hidden');
+                // Ir directamente a Jinotega si no hay geolocalización
+                setTimeout(() => {
+                    showLocationModal();
+                }, 500);
+                return;
+            }
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 60000
+            };
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    userLocation = { lat, lng };
+                    
+                    // Verificar si está en Jinotega
+                    if (isInJinotega(lat, lng)) {
+                        // Está en Jinotega, mostrar su ubicación real
+                        map.setView([lat, lng], 16);
+                        addUserMarker(lat, lng);
+                        loadingOverlay.classList.add('hidden');
+                    } else {
+                        // Está fuera de Jinotega, mostrar modal
+                        loadingOverlay.classList.add('hidden');
+                        setTimeout(() => {
+                            showLocationModal();
+                        }, 500);
+                    }
+                },
+                function(error) {
+                    console.log('Error obteniendo ubicación:', error);
+                    loadingOverlay.classList.add('hidden');
+                    // En caso de error, mostrar modal para ir a Jinotega
+                    setTimeout(() => {
+                        showLocationModal();
+                    }, 500);
+                },
+                options
+            );
+        }
+
+        // Función para agregar el marcador del usuario
+        function addUserMarker(lat, lng) {
+            const userMarkerIcon = L.divIcon({
+                className: 'custom-marker user',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            userMarker = L.marker([lat, lng], {
+                icon: userMarkerIcon
+            }).addTo(map);
+
+            userMarker.bindPopup("<b>Tu ubicación</b><br>Estás aquí");
+        }
+
+        // Inicializar el mapa
+        function initializeMap() {
+            map = L.map('map', {
+                zoomControl: false,
+                attributionControl: false,
+                dragging: true,
+                scrollWheelZoom: true,
+                doubleClickZoom: true
+            }).setView(jinotegaCenter, 14);
+
+            // Agregar tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            // Crear iconos personalizados
+            const redMarkerIcon = L.divIcon({
+                className: 'custom-marker red',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            const whiteMarkerIcon = L.divIcon({
+                className: 'custom-marker white',
+                iconSize: [20, 20],
+                iconAnchor: [10, 10]
+            });
+
+            // Coordenadas para las rutas en Jinotega
+            const greenRouteCoords = [
+                [13.095, -85.995],
+                [13.090, -85.998],
+                [13.085, -86.001],
+                [13.082, -86.005],
+                [13.078, -86.008],
+                [13.075, -86.012],
+                [13.072, -86.015],
+                [13.069, -86.018]
+            ];
+
+            const orangeRouteCoords = [
+                [13.088, -86.020],
+                [13.088, -86.015],
+                [13.088, -86.010],
+                [13.088, -86.005],
+                [13.082, -86.005],
+                [13.078, -86.002],
+                [13.075, -85.998],
+                [13.072, -85.995]
+            ];
+
+            // Dibujar rutas
+            const greenRoute = L.polyline(greenRouteCoords, {
+                color: '#4CAF50',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+
+            const orangeRoute = L.polyline(orangeRouteCoords, {
+                color: '#FF9800',
+                weight: 4,
+                opacity: 0.8
+            }).addTo(map);
+
+            // Marcadores de referencia
+            const centerMarker = L.marker([13.082, -86.005], {
+                icon: redMarkerIcon
+            }).addTo(map);
+
+            // Marcadores blancos en puntos estratégicos
+            const whiteMarkers = [
+                [13.090, -85.998],
+                [13.075, -86.012],
+                [13.072, -85.995]
+            ];
+
+            whiteMarkers.forEach(coord => {
+                L.marker(coord, {
+                    icon: whiteMarkerIcon
+                }).addTo(map);
+            });
+
+            // Popup para el marcador central
+            centerMarker.bindPopup("<b>Centro de Jinotega</b><br>Punto de referencia principal");
+
+            // Ajustar la vista del mapa para mostrar todas las rutas
+            const group = new L.featureGroup([greenRoute, orangeRoute]);
+            map.fitBounds(group.getBounds(), { padding: [50, 50] });
+
+            // Obtener ubicación del usuario después de inicializar el mapa
+            getUserLocation();
+        }
+
+        // Simulación de unidades activas (esto normalmente vendría de una API)
+        function updateActiveUnits() {
+            const greenUnits = Math.floor(Math.random() * 5) + 1; // 1-5 unidades
+            const orangeUnits = Math.floor(Math.random() * 4) + 1; // 1-4 unidades
+            
+            document.getElementById('greenRouteUnits').textContent = `${greenUnits} unidades`;
+            document.getElementById('orangeRouteUnits').textContent = `${orangeUnits} unidades`;
+        }
+
+        // Actualizar unidades cada 30 segundos
+        setInterval(updateActiveUnits, 30000);
+
+        // Funcionalidad de navegación
+        const navItems = document.querySelectorAll('.nav-item');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navItems.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                const navType = this.getAttribute('data-nav');
+                console.log('Navegando a:', navType);
+                
+                switch(navType) {
+                    case 'home':
+                        // Lógica para inicio
+                        break;
+                    case 'location':
+                        // Centrar en la ubicación del usuario si existe
+                        if (userLocation && userMarker) {
+                            map.setView([userLocation.lat, userLocation.lng], 16);
+                        }
+                        break;
+                    case 'walk':
+                        // Lógica para viajes
+                        break;
+                    case 'bus':
+                        // Lógica para buses
+                        break;
+                    case 'settings':
+                        // Lógica para ajustes
+                        break;
+                }
+            });
+        });
+
+        // Función para actualizar la ubicación del usuario periódicamente
+        function trackUserLocation() {
+            if (!navigator.geolocation) return;
+
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 30000
+            };
+
+            navigator.geolocation.watchPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    if (isInJinotega(lat, lng)) {
+                        userLocation = { lat, lng };
+                        
+                        if (userMarker) {
+                            userMarker.setLatLng([lat, lng]);
+                        } else {
+                            addUserMarker(lat, lng);
+                        }
+                    }
+                },
+                function(error) {
+                    console.log('Error actualizando ubicación:', error);
+                },
+                options
+            );
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMap();
+            updateActiveUnits();
+            
+            // Comenzar a rastrear la ubicación del usuario cada minuto
+            setTimeout(() => {
+                trackUserLocation();
+            }, 60000);
+        });
+
+        // Función global para el botón del modal
+        window.goToJinotega = goToJinotega;
+    </script>
+</body>
+</html>

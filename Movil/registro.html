@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/sesion/registro.css">
+    <title>NextStop - Registrarse</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            Registrate
+        </div>
+    </div>
+
+    <div class="main-content">
+        <p class="subtitle">Crea tu cuenta en NextStop</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label class="form-label" for="name">Nombre</label>
+                <input type="text" id="name" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input type="email" id="email" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Contraseña</label>
+                <input type="password" id="password" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirmar Contraseña</label>
+                <input type="password" id="confirmPassword" class="form-input" required>
+            </div>
+
+            <button type="submit" class="register-button">Registrarse</button>
+
+            
+        </form>
+<p class="login-link">
+            ¿Ya tienes una cuenta? <a href="#" id="loginLink">¡Inicia sesión ahora!</a>
+        </p>
+        
+    </div>
+   <script src="./js/sesion/registro.js"></script>
+</body>
+</html>
