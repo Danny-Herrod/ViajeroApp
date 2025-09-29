@@ -4,7 +4,7 @@
 <div align="center">
   <img src="https://github.com/Danny-Herrod/ViajeroApp/blob/demo/Movil/assets/imagotipo.png" alt="Next Stop Logo" width="200">
   
-  [![Hackathon](https://img.shields.io/badge/Hackathon-Disruptico%20Nicaragua%202025-blue?style=for-the-badge)](https://github.com/Danny-Herrod/ViajeroApp)
+  [![Hackathon](https://img.shields.io/badge/Hackathon-Disruptivo%20Nicaragua%202025-blue?style=for-the-badge)](https://github.com/Danny-Herrod/ViajeroApp)
   [![Status](https://img.shields.io/badge/Status-En%20Desarrollo-yellow?style=for-the-badge)]()
 </div>
 
