@@ -1,53 +1,153 @@
+# Next Stop
+### Sistema de Monitoreo en Tiempo Real del Transporte Público
 
-
-<img src="https://github.com/Danny-Herrod/ViajeroApp/blob/demo/Movil/assets/imagotipo.png" alt="Vista previa de NextStop" width="150">
-
-
-
-## Next Stop - Sistema de Monitoreo en Tiempo Real del Transporte Público
-
-### Descripción
-**Next Stop** es una aplicación diseñada para mejorar la eficiencia del sistema de transporte colectivo, ofreciendo mayor seguridad y transparencia a los usuarios, y facilitando a las autoridades un control y supervisión más efectivo del servicio.  
-La aplicación combina información en tiempo real, planificación de viajes y análisis de datos para optimizar la experiencia de todos los actores involucrados.
+<div align="center">
+  <img src="https://github.com/Danny-Herrod/ViajeroApp/blob/demo/Movil/assets/imagotipo.png" alt="Next Stop Logo" width="200">
+  
+  [![Hackathon](https://img.shields.io/badge/Hackathon-Disruptico%20Nicaragua%202025-blue?style=for-the-badge)](https://github.com/Danny-Herrod/ViajeroApp)
+  [![Status](https://img.shields.io/badge/Status-En%20Desarrollo-yellow?style=for-the-badge)]()
+</div>
 
 ---
 
-### Funcionalidades
+## Descripción del Proyecto
 
-#### Para usuarios
-1. **Información de rutas en tiempo real**  
-   Visualización de rutas activas, paradas disponibles y recorridos actuales de los buses.
+**Next Stop** es una solución integral diseñada para revolucionar el transporte público mediante tecnología en tiempo real. Nuestra aplicación conecta usuarios, conductores y autoridades para crear un ecosistema de transporte más eficiente, seguro y transparente.
 
-2. **Tiempos de espera estimados y planificador de viajes**  
-   Consulta de tiempos aproximados de llegada de unidades, cálculo de rutas óptimas y planificación de viajes.
-
-3. **Alertas y notificaciones**  
-   Recepción de avisos sobre retrasos, cambios en rutas o incidencias importantes para una mejor experiencia de viaje.
-
-#### Para IRTRAMMA (Autoridades y gestores del transporte)
-1. **Monitoreo de flotas en tiempo real**  
-   Seguimiento de cada unidad en el mapa para garantizar seguridad y eficiencia operativa.
-
-2. **Gestión de rutas y horarios**  
-   Configuración y optimización de rutas, paradas y horarios de cada unidad de transporte.
-
-3. **Análisis de datos y reportes (KPIs de operación)**  
-   Generación de métricas clave para evaluar desempeño, puntualidad y eficiencia del sistema.
-
-4. **Análisis de reportes de usuarios**  
-   Recepción y análisis de comentarios, quejas y sugerencias para mejorar el servicio.
-
-5. **Gestión de conductores y unidades**  
-   Administración de información del personal y de cada vehículo, asegurando un seguimiento adecuado de recursos.
+> **Visión**: Transformar la experiencia del transporte público a través de la innovación tecnológica y la información en tiempo real.
 
 ---
 
-### Tecnologías
-- Frontend: Html, css y JavaScript 
-- Mapas: Leaflet.js para geolocalización y rutas.
-- Servicios: APIs de geocodificación y cálculo de rutas.
-- Almacenamiento: LocalStorage / JSON (para demo).
+## Características Principales
+
+### **Para Usuarios**
+<table>
+<tr>
+<td width="50%">
+
+**Información en Tiempo Real**
+- Rutas activas y disponibles
+- Ubicación actual de buses
+- Estado del servicio por ruta
+- Cantidad de unidades (rutas / buses) por recorrido
+
+</td>
+<td width="50%">
+
+**Planificación Inteligente**
+- Tiempos de espera estimados
+- Cálculo de rutas óptimas por todo el pais
+- Planificador de viajes personalizado
+- Estimacion de costos
+- Compra de boletos
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Sistema de Alertas**
+- Notificaciones de retrasos
+- Cambios en rutas
+- Incidencias importantes
+
+</td>
+<td width="50%">
+
+**Experiencia de Usuario**
+- Interfaz intuitiva
+- Acceso offline limitado (horarios y paradas)
+- Historial de viajes
+
+</td>
+</tr>
+</table>
+
+### **Para IRTRAMMA (Autoridades)**
+<table>
+<tr>
+<td width="33%">
+
+**Panel de Control**
+- Monitoreo de flota completa
+- Dashboard en tiempo real
+- Métricas de operación
+
+</td>
+<td width="33%">
+
+**Gestión Operativa**
+- Configuración de rutas
+- Administración de horarios
+- Control de unidades
+
+</td>
+<td width="33%">
+
+**Análisis Avanzado**
+- KPIs de operación
+- Reportes de usuarios
+- Optimización de recursos
+
+</td>
+</tr>
+</table>
 
 ---
 
+## Tecnologías Utilizadas
 
+<div align="center">
+
+| Frontend | Mapas | Servicios | Almacenamiento |
+|----------|-------|-----------|----------------|
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) | ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat-square&logo=leaflet&logoColor=white) | ![API](https://img.shields.io/badge/Geocoding-API-blue?style=flat-square) | ![JSON](https://img.shields.io/badge/JSON-000000?style=flat-square&logo=json&logoColor=white) |
+| ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) | ![Maps](https://img.shields.io/badge/Maps-4285F4?style=flat-square&logo=googlemaps&logoColor=white) | ![Routing](https://img.shields.io/badge/Routing-API-green?style=flat-square) | ![LocalStorage](https://img.shields.io/badge/LocalStorage-FF6B6B?style=flat-square) |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) | | | |
+
+</div>
+
+---
+
+## Acceso a la Aplicación
+
+### **Demo en Vivo**
+
+Puedes acceder a la aplicación directamente desde tu navegador:
+
+<div align="center">
+  <a href="https://nextstop.xinocore.com" target="_blank">
+    <img src="https://img.shields.io/badge/Next%20Stop-Acceder%20Demo-4CAF50?style=for-the-badge&logo=web&logoColor=white" alt="Acceder a Next Stop">
+  </a>
+  
+  **[nextstop.xinocore.com](https://nextstop.xinocore.com)**
+</div>
+
+### Requerimientos Técnicos minimos
+
+- **Navegador Web**: Chrome, Firefox, Safari, etc.
+- **Conexión a Internet**: Para funcionalidades en tiempo real
+- **Geolocalización**: Habilitada para mejor experiencia
+
+---
+
+## Uso de la Aplicación
+
+### **Para Usuarios**
+1. **Busca tu ruta**: Utiliza el buscador o selecciona desde el mapa
+2. **Planifica tu viaje**: Consulta horarios y tiempos estimados
+3. **Recibe notificaciones**: Mantente informado sobre cambios
+4. **Evalúa el servicio**: Comparte tu experiencia
+
+### **Para Administradores**
+1. **Accede al panel**: Login con credenciales administrativas
+2. **Monitorea en tiempo real**: Visualiza todas las unidades activas
+3. **Gestiona rutas**: Configura horarios y paradas
+4. **Analiza datos**: Revisa KPIs y reportes de usuarios
+
+---
+
+<div align="center">
+  <p><strong>¡Transformando el transporte público del futuro!</strong></p>
+  <p>Hecho con ❤️ para el Hackathon Disruptivo Nicaragua 2025</p>
+</div>
