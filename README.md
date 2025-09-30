@@ -116,7 +116,7 @@
 Puedes acceder a la aplicación directamente desde tu navegador:
 
 <div align="center">
-  <a href="https://nextstop.xinocore.com" target="_blank">
+  <a href="https://nextstopdemo.netlify.app/" target="_blank">
     <img src="https://img.shields.io/badge/Next%20Stop-Acceder%20Demo-4CAF50?style=for-the-badge&logo=web&logoColor=white" alt="Acceder a Next Stop">
   </a>
   
