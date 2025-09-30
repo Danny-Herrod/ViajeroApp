@@ -120,7 +120,7 @@ Puedes acceder a la aplicación directamente desde tu navegador:
     <img src="https://img.shields.io/badge/Next%20Stop-Acceder%20Demo-4CAF50?style=for-the-badge&logo=web&logoColor=white" alt="Acceder a Next Stop">
   </a>
   
-  **[nextstop.xinocore.com](https://nextstop.xinocore.com)**
+  **[nextstop.com](https://nextstopdemo.netlify.app/)**
 </div>
 
 ### Requerimientos Técnicos minimos
