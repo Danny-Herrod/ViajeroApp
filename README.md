@@ -1,75 +1,153 @@
-```
-██╗   ██╗██╗ █████╗      ██╗███████╗██████╗  ██████╗      █████╗ ██████╗ ██████╗ 
-██║   ██║██║██╔══██╗     ██║██╔════╝██╔══██╗██╔═══██╗    ██╔══██╗██╔══██╗██╔══██╗
-██║   ██║██║███████║     ██║█████╗  ██████╔╝██║   ██║    ███████║██████╔╝██████╔╝
-╚██╗ ██╔╝██║██╔══██║██   ██║██╔══╝  ██╔══██╗██║   ██║    ██╔══██║██╔═══╝ ██╔═══╝ 
- ╚████╔╝ ██║██║  ██║╚█████╔╝███████╗██║  ██║╚██████╔╝    ██║  ██║██║     ██║     
-  ╚═══╝  ╚═╝╚═╝  ╚═╝ ╚════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚═╝  ╚═╝╚═╝     ╚═╝     
-                               ╔═══════════════════╗
-                               ║  🧳 → 🗺️ → 📍 → ✨ 
-                               ╚═══════════════════╝
-```
-#  ViajeroApp – Demo de Panel de Registro de Rutas
+# Next Stop
+### Sistema de Monitoreo en Tiempo Real del Transporte Público
 
-Este proyecto es una **implementación temprana** de **ViajeroApp**, enfocado en la **gestión y visualización de rutas de buses** con soporte para cálculo de caminos reales en el mapa.  
-El objetivo es sentar las bases de un sistema que permita **registrar rutas, paradas y horarios**, mostrando la información de forma interactiva.
+<div align="center">
+  <img src="https://github.com/Danny-Herrod/ViajeroApp/blob/demo/Movil/assets/imagotipo.png" alt="Next Stop Logo" width="200">
+  
+  [![Hackathon](https://img.shields.io/badge/Hackathon-Disruptivo%20Nicaragua%202025-blue?style=for-the-badge)](https://github.com/Danny-Herrod/ViajeroApp)
+  [![Status](https://img.shields.io/badge/Status-En%20Desarrollo-yellow?style=for-the-badge)]()
+</div>
 
 ---
 
-##  Funcionalidades implementadas en la demo
+## Descripción del Proyecto
 
--  **Registro de rutas** mediante formulario:
-  - Nombre de la ruta.  
-  - Número de ruta.  
-  - Horarios de inicio y fin.  
-  - Frecuencia de paso.  
+**Next Stop** es una solución integral diseñada para revolucionar el transporte público mediante tecnología en tiempo real. Nuestra aplicación conecta usuarios, conductores y autoridades para crear un ecosistema de transporte más eficiente, seguro y transparente.
 
-- 🗺 **Gestión de paradas:**
-  - Agregar paradas manualmente con latitud/longitud.  
-  - Selección de paradas haciendo clic en el mapa.  
-  - Opción para usar la ubicación actual del usuario.  
-  - Eliminación de paradas con un clic.  
-
--  **Visualización en mapa (Leaflet):**
-  - Inicio de ruta en verde.  
-  - Paradas intermedias en azul.  
-  - Final de ruta en rojo.  
-  - Rutas calculadas siguiendo **las calles reales** (no líneas rectas).  
-
--  **Gestión de rutas guardadas:**
-  - Listado de rutas registradas en la interfaz.  
-  - Estado vacío inicial indicando que aún no hay rutas.  
+> **Visión**: Transformar la experiencia del transporte público a través de la innovación tecnológica y la información en tiempo real.
 
 ---
 
-## 🛠 Tecnologías utilizadas
+## Características Principales
 
-- **Frontend:** HTML5, CSS3, JavaScript.  
-- **Mapas:** [Leaflet.js](https://leafletjs.com/) (visualización de mapas y coordenadas).  
-- **Servicios:**  
-  - `LocationService.js` → obtiene ubicación actual.  
-  - `RouteCalculator.js` → cálculo de rutas siguiendo calles reales.  
-  - `MapManager.js` → gestión del mapa, marcadores y líneas.  
-  - `FormManager.js` → manejo del formulario de registro de rutas.  
-  - `RouteManager.js` → almacenamiento y gestión de rutas guardadas.  
-  - `UIManager.js` → actualiza la interfaz según el estado del sistema.  
+### **Para Usuarios**
+<table>
+<tr>
+<td width="50%">
+
+**Información en Tiempo Real**
+- Rutas activas y disponibles
+- Ubicación actual de buses
+- Estado del servicio por ruta
+- Cantidad de unidades (rutas / buses) por recorrido
+
+</td>
+<td width="50%">
+
+**Planificación Inteligente**
+- Tiempos de espera estimados
+- Cálculo de rutas óptimas por todo el pais
+- Planificador de viajes personalizado
+- Estimacion de costos
+- Compra de boletos
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Sistema de Alertas**
+- Notificaciones de retrasos
+- Cambios en rutas
+- Incidencias importantes
+
+</td>
+<td width="50%">
+
+**Experiencia de Usuario**
+- Interfaz intuitiva
+- Acceso offline limitado (horarios y paradas)
+- Historial de viajes
+
+</td>
+</tr>
+</table>
+
+### **Para IRTRAMMA (Autoridades)**
+<table>
+<tr>
+<td width="33%">
+
+**Panel de Control**
+- Monitoreo de flota completa
+- Dashboard en tiempo real
+- Métricas de operación
+
+</td>
+<td width="33%">
+
+**Gestión Operativa**
+- Configuración de rutas
+- Administración de horarios
+- Control de unidades
+
+</td>
+<td width="33%">
+
+**Análisis Avanzado**
+- KPIs de operación
+- Reportes de usuarios
+- Optimización de recursos
+
+</td>
+</tr>
+</table>
 
 ---
 
-##  Cómo usar la demo
+## Tecnologías Utilizadas
 
-1. Abre el proyecto en tu navegador mediante el siguiente link ([Viajero app Demo](http://viajeroapp-demo.surge.sh/)).  
-2. En el formulario lateral:
-   - Ingresa nombre, número, horarios y frecuencia de la ruta.  
-   - Añade paradas con clic en el mapa o manualmente.  
-   - Usa **📍 Mi Ubicación** para agregar tu posición actual.  
-   - Haz clic en **🗺️ Calcular Ruta** para generar el camino siguiendo calles reales.  
-3. Guarda la ruta y visualízala en la lista lateral.  
+<div align="center">
+
+| Frontend | Mapas | Almacenamiento |
+|----------|-------|----------------|
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white) | ![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=flat-square&logo=leaflet&logoColor=white)  | ![JSON](https://img.shields.io/badge/JSON-000000?style=flat-square&logo=json&logoColor=white) |
+| ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white) | ![Maps](https://img.shields.io/badge/Maps-4285F4?style=flat-square&logo=googlemaps&logoColor=white)  | ![LocalStorage](https://img.shields.io/badge/LocalStorage-FF6B6B?style=flat-square) |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black) | | | |
+
+</div>
 
 ---
 
-##  Estado actual
+## Acceso a la Aplicación
 
-Esta demo es una **primera versión funcional del panel de registro de rutas**, centrada en:
-- Captura y almacenamiento de rutas.  
-- Visualización de recorridos reales en el mapa.  
+### **Demo en Vivo**
+
+Puedes acceder a la aplicación directamente desde tu navegador:
+
+<div align="center">
+  <a href="https://nextstop.xinocore.com" target="_blank">
+    <img src="https://img.shields.io/badge/Next%20Stop-Acceder%20Demo-4CAF50?style=for-the-badge&logo=web&logoColor=white" alt="Acceder a Next Stop">
+  </a>
+  
+  **[nextstop.xinocore.com](https://nextstop.xinocore.com)**
+</div>
+
+### Requerimientos Técnicos minimos
+
+- **Navegador Web**: Chrome, Firefox, Safari, etc.
+- **Conexión a Internet**: Para funcionalidades en tiempo real
+- **Geolocalización**: Habilitada para mejor experiencia
+
+---
+
+## Uso de la Aplicación
+
+### **Para Usuarios**
+1. **Busca tu ruta**: Utiliza el buscador o selecciona desde el mapa
+2. **Planifica tu viaje**: Consulta horarios y tiempos estimados
+3. **Recibe notificaciones**: Mantente informado sobre cambios
+4. **Evalúa el servicio**: Comparte tu experiencia
+
+### **Para Administradores**
+1. **Accede al panel**: Login con credenciales administrativas
+2. **Monitorea en tiempo real**: Visualiza todas las unidades activas
+3. **Gestiona rutas**: Configura horarios y paradas
+4. **Analiza datos**: Revisa KPIs y reportes de usuarios
+
+---
+
+<div align="center">
+  <p><strong>¡Transformando el transporte público del futuro!</strong></p>
+  <p>Hecho con ❤️ para el Hackathon Disruptivo Nicaragua 2025</p>
+</div>

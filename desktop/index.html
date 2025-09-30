@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Rutas de Buses con Routing Real</title>
+    <title>NextStop - Panel Administrativo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="manifest" href="./manifest.json">
@@ -11,7 +14,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>ViajeroApp-Demo</h1>
+            <div class="header-logo">
+                <img src="./assets/LOGOTRAS.png" alt="NextStop Logo" class="logo-image">
+                <div>
+                    <h1>Panel Administrativo</h1>
+                    <p class="header-subtitle">Gestión de Rutas y Paradas</p>
+                </div>
+            </div>
         </div>
         
         <div class="content">
@@ -84,22 +93,20 @@
             </div>
             
             <div class="map-container">
-                <!--
                 <div class="map-instructions">
-                    <h4>💡 Instrucciones</h4>
-                    <p>• Haz clic en el mapa para agregar paradas</p>
-                    <p>• Usa "Calcular Ruta" para ver el camino real</p>
-                    <p>• Verde = Inicio, Rojo = Final, Azul = Paradas</p>
-                    <p>• Las rutas siguen las calles reales</p>
+                    <h4>Instrucciones</h4>
+                    <p>Haz clic en el mapa para agregar paradas</p>
+                    <p>Usa "Calcular Ruta" para ver el camino real</p>
+                    <p>Verde = Inicio, Rojo = Final, Amarillo = Paradas</p>
+                    <p>Las rutas siguen las calles reales</p>
                 </div>
-                -->
                 <div id="map"></div>
             </div>
         </div>
     </div>
 
     <div class="loading-indicator" id="loadingIndicator">
-        🔄 Calculando ruta por calles...
+        Calculando ruta por calles...
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
@@ -110,5 +117,24 @@
     <script src="./js/RouteManager.js"></script>
     <script src="./js/UIManager.js"></script>
     <script src="./js/main.js"></script>
+    
+    <script>
+        // Funciones adicionales para el header
+        function exportRoutes() {
+            const routes = JSON.parse(localStorage.getItem('busRoutes') || '[]');
+            if (routes.length === 0) {
+                alert('No hay rutas para exportar');
+                return;
+            }
+            const dataStr = JSON.stringify(routes, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rutas-nextstop-' + new Date().toISOString().split('T')[0] + '.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
 </body>
 </html>
