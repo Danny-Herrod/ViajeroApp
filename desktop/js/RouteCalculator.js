@@ -1,8 +1,8 @@
 // RouteCalculator.js - Servicios de cálculo de rutas
 class RouteCalculator {
     constructor() {
+        // Eliminamos OpenRouteService por problemas de CORS
         this.apiKeys = {
-            openRouteService: '5b3ce3597851110001cf62489c8b8e2df85d4e7bb07e8f0dd3de22e4',
             mapbox: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
         };
     }
@@ -13,8 +13,8 @@ class RouteCalculator {
             throw new Error('Necesitas al menos 2 paradas para calcular la ruta.');
         }
 
+        // Priorizar OSRM (gratuito y sin CORS) y Mapbox como respaldo
         const services = [
-            () => this.getRouteFromORS(coordinates),
             () => this.getRouteFromOSRM(coordinates),
             () => this.getRouteFromMapbox(coordinates)
         ];
@@ -23,10 +23,11 @@ class RouteCalculator {
             try {
                 const result = await service();
                 if (result?.features?.length > 0) {
+                    console.log('✅ Ruta calculada exitosamente');
                     return result;
                 }
             } catch (error) {
-                console.log('Servicio de routing falló, intentando siguiente...', error);
+                console.log('⚠️ Servicio de routing falló, intentando siguiente...', error.message);
                 continue;
             }
         }
@@ -34,36 +35,11 @@ class RouteCalculator {
         throw new Error('Todos los servicios de routing fallaron');
     }
 
-    // OpenRouteService
-    async getRouteFromORS(coordinates) {
-        const url = 'https://api.openrouteservice.org/v2/directions/driving-car/geojson';
-        
-        const requestBody = {
-            coordinates: coordinates,
-            instructions: true,
-            geometry: true
-        };
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': this.apiKeys.openRouteService
-            },
-            body: JSON.stringify(requestBody)
-        });
-
-        if (!response.ok) {
-            throw new Error(`ORS HTTP error! status: ${response.status}`);
-        }
-
-        return await response.json();
-    }
-
-    // OSRM (Open Source Routing Machine)
+    // OSRM (Open Source Routing Machine) - Sin problemas de CORS
     async getRouteFromOSRM(coordinates) {
+        // OSRM soporta hasta 100 waypoints
         const coordString = coordinates.map(coord => `${coord[0]},${coord[1]}`).join(';');
-        const url = `https://router.project-osrm.org/route/v1/driving/${coordString}?overview=full&geometries=geojson`;
+        const url = `https://router.project-osrm.org/route/v1/driving/${coordString}?overview=full&geometries=geojson&continue_straight=false`;
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -72,24 +48,33 @@ class RouteCalculator {
 
         const data = await response.json();
 
-        // Convertir formato OSRM a formato compatible
+        if (!data.routes || data.routes.length === 0) {
+            throw new Error('No routes found from OSRM');
+        }
+
+        // OSRM retorna UNA geometría continua para toda la ruta
         return {
             features: [{
                 geometry: data.routes[0].geometry,
                 properties: {
-                    segments: [{
+                    summary: {
                         distance: data.routes[0].distance,
                         duration: data.routes[0].duration
-                    }]
+                    }
                 }
             }]
         };
     }
 
-    // Mapbox
+    // Mapbox - Respaldo
     async getRouteFromMapbox(coordinates) {
+        // Mapbox soporta hasta 25 waypoints
+        if (coordinates.length > 25) {
+            throw new Error('Mapbox no soporta más de 25 paradas');
+        }
+
         const coordString = coordinates.map(coord => `${coord[0]},${coord[1]}`).join(';');
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordString}?geometries=geojson&access_token=${this.apiKeys.mapbox}`;
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${coordString}?geometries=geojson&overview=full&access_token=${this.apiKeys.mapbox}`;
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -102,15 +87,15 @@ class RouteCalculator {
             throw new Error('No routes found from Mapbox');
         }
 
-        // Convertir formato Mapbox a formato compatible
+        // Mapbox retorna UNA geometría continua para toda la ruta
         return {
             features: [{
                 geometry: data.routes[0].geometry,
                 properties: {
-                    segments: [{
+                    summary: {
                         distance: data.routes[0].distance,
                         duration: data.routes[0].duration
-                    }]
+                    }
                 }
             }]
         };
@@ -118,15 +103,31 @@ class RouteCalculator {
 
     // Obtener información de la ruta calculada
     getRouteInfo(routeData) {
-        if (!routeData?.features?.[0]?.properties?.segments?.[0]) {
+        if (!routeData?.features?.[0]) {
             return null;
         }
 
-        const segment = routeData.features[0].properties.segments[0];
+        const feature = routeData.features[0];
+        let totalDistance = 0;
+        let totalDuration = 0;
+        
+        // Manejar diferentes formatos de respuesta
+        if (feature.properties?.segments && Array.isArray(feature.properties.segments)) {
+            // Formato ORS con segmentos
+            feature.properties.segments.forEach(segment => {
+                totalDistance += segment.distance || 0;
+                totalDuration += segment.duration || 0;
+            });
+        } else if (feature.properties?.summary) {
+            // Formato OSRM/Mapbox con summary
+            totalDistance = feature.properties.summary.distance || 0;
+            totalDuration = feature.properties.summary.duration || 0;
+        }
+        
         return {
-            distance: (segment.distance / 1000).toFixed(2),
-            duration: Math.round(segment.duration / 60),
-            geometry: routeData.features[0].geometry.coordinates
+            distance: (totalDistance / 1000).toFixed(2),
+            duration: Math.round(totalDuration / 60),
+            geometry: feature.geometry.coordinates
         };
     }
 }

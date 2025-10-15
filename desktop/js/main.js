@@ -39,9 +39,9 @@ class BusRouteApp {
             this.uiManager.addImportExportButtons();
             this.uiManager.setupUIEvents();
             
-            console.log('Bus Route App inicializada correctamente');
+            console.log('✅ Bus Route App inicializada correctamente');
         } catch (error) {
-            console.error('Error al inicializar la aplicación:', error);
+            console.error('❌ Error al inicializar la aplicación:', error);
             alert('Error al cargar la aplicación. Por favor, recarga la página.');
         }
     }
@@ -85,6 +85,13 @@ class BusRouteApp {
         if (clearBtn) {
             clearBtn.addEventListener('click', () => this.formManager.clearForm());
         }
+
+        // Delegación de eventos para botones de eliminar parada
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('[data-action="removeParada"]')) {
+                this.formManager.removeParada(e.target.closest('[data-action="removeParada"]'));
+            }
+        });
     }
 
     // Manejar envío del formulario de ruta
@@ -108,6 +115,9 @@ class BusRouteApp {
 
             // Mostrar loading
             this.uiManager.showLoading(true, 'Guardando ruta...');
+
+            // IMPORTANTE: Limpiar preview antes de guardar
+            this.mapManager.clearPreviewRoute();
 
             // Agregar ruta
             const savedRoute = await this.routeManager.addRoute(routeData);
@@ -152,7 +162,7 @@ class BusRouteApp {
                     throw new Error('No se pudo calcular la ruta');
                 }
             } catch (error) {
-                console.warn('Error calculando ruta:', error);
+                console.warn('⚠️ Error calculando ruta:', error);
                 this.uiManager.showError('Error al calcular la ruta. Usando línea directa como respaldo.');
                 this.mapManager.displayDirectRoute(coordinates);
             }

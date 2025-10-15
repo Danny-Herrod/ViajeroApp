@@ -70,16 +70,16 @@
                                     <input type="number" placeholder="Longitud" step="any" class="parada-lng">
                                     <div class="coordinate-display"></div>
                                 </div>
-                                <button type="button" class="btn-remove" onclick="removeParada(this)">×</button>
+                                <button type="button" class="btn-remove" data-action="removeParada">×</button>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-secondary btn-small" onclick="addParada()">+ Agregar Parada</button>
-                        <button type="button" class="btn btn-secondary btn-small" onclick="getCurrentLocation()">📍 Mi Ubicación</button>
-                        <button type="button" class="btn btn-secondary btn-small" onclick="calculateRoute()" id="calculateBtn">🗺️ Calcular Ruta</button>
+                        <button type="button" class="btn btn-secondary btn-small add-stop-btn">+ Agregar Parada</button>
+                        <button type="button" class="btn btn-secondary btn-small location-btn">📍 Mi Ubicación</button>
+                        <button type="button" class="btn btn-secondary btn-small" id="calculateBtn">🗺️ Calcular Ruta</button>
                     </div>
                     
                     <button type="submit" class="btn">Guardar Ruta</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearForm()">Limpiar</button>
+                    <button type="button" class="btn btn-secondary clear-btn">Limpiar</button>
                 </form>
                 
                 <div class="routes-list">
@@ -117,24 +117,5 @@
     <script src="./js/RouteManager.js"></script>
     <script src="./js/UIManager.js"></script>
     <script src="./js/main.js"></script>
-    
-    <script>
-        // Funciones adicionales para el header
-        function exportRoutes() {
-            const routes = JSON.parse(localStorage.getItem('busRoutes') || '[]');
-            if (routes.length === 0) {
-                alert('No hay rutas para exportar');
-                return;
-            }
-            const dataStr = JSON.stringify(routes, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(dataBlob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'rutas-nextstop-' + new Date().toISOString().split('T')[0] + '.json';
-            link.click();
-            URL.revokeObjectURL(url);
-        }
-    </script>
 </body>
 </html>

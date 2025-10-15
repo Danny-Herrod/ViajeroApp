@@ -78,7 +78,7 @@ class RouteManager {
         return true;
     }
 
-    // Alternar visibilidad de ruta
+    // Alternar visibilidad de ruta - CORREGIDO
     toggleRouteVisibility(routeIndex) {
         if (routeIndex < 0 || routeIndex >= this.routes.length) {
             return;
@@ -87,10 +87,12 @@ class RouteManager {
         const route = this.routes[routeIndex];
         route.visible = !route.visible;
         
-        this.mapManager.toggleRouteVisibility(routeIndex, route.visible);
-        
         if (route.visible) {
+            // Agregar ruta al mapa
             this.mapManager.addRouteToMap(route, routeIndex);
+        } else {
+            // Remover ruta del mapa
+            this.mapManager.toggleRouteVisibility(routeIndex, false);
         }
         
         return route.visible;

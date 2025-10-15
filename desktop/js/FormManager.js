@@ -32,7 +32,7 @@ class FormManager {
                 <input type="number" placeholder="Longitud" step="any" class="parada-lng">
                 <div class="coordinate-display"></div>
             </div>
-            <button type="button" class="btn-remove" onclick="formManager.removeParada(this)">×</button>
+            <button type="button" class="btn-remove" data-action="removeParada">×</button>
         `;
         
         container.appendChild(paradaDiv);
@@ -198,7 +198,7 @@ class FormManager {
                     <input type="number" placeholder="Longitud" step="any" class="parada-lng" value="${parada.lng}">
                     <div class="coordinate-display">📍 ${parada.lat}, ${parada.lng}</div>
                 </div>
-                <button type="button" class="btn-remove" onclick="formManager.removeParada(this)">×</button>
+                <button type="button" class="btn-remove" data-action="removeParada">×</button>
             `;
             container.appendChild(paradaDiv);
         });
@@ -218,7 +218,7 @@ class FormManager {
                     <input type="number" placeholder="Longitud" step="any" class="parada-lng">
                     <div class="coordinate-display"></div>
                 </div>
-                <button type="button" class="btn-remove" onclick="formManager.removeParada(this)">×</button>
+                <button type="button" class="btn-remove" data-action="removeParada">×</button>
             </div>
         `;
     }
