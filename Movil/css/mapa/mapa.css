@@ -1,341 +1,551 @@
 * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-             font-family: 'Nunito', sans-serif;
-            background: #f0f0f0;
-            height: 100vh;
-            overflow: hidden;
-        }
+body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    height: 100vh;
+    overflow: hidden;
+}
 
-        .app-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+.app-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
 
-        .map-container {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
+.map-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
 
-        #map {
-            height: 100%;
-            width: 100%;
-        }
+#map {
+    height: 100%;
+    width: 100%;
+}
 
-        /* Filtro para hacer el mapa gris */
-        .leaflet-container {
-            filter: none;
-        }
+.leaflet-container {
+    filter: none;
+}
 
-        /* Modal de ubicación fuera de Jinotega */
-        .location-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
+/* Modal de ubicación fuera de Jinotega */
+.location-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
 
-        .location-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
+.location-modal.show {
+    opacity: 1;
+    visibility: visible;
+}
 
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 350px;
-            margin: 20px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 350px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
 
-        .modal-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: #FF9800;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.modal-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: #FF9800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .modal-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 15px;
-        }
+.modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+}
 
-        .modal-text {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
+.modal-text {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
 
-        .modal-button {
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
+.modal-button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
 
-        .modal-button:hover {
-            background: #45a049;
-        }
+.modal-button:hover {
+    background: #45a049;
+}
 
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-        }
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
 
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
 
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #4CAF50;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
-        .loading-text {
-            font-size: 18px;
-            color: #333;
-            font-weight: 600;
-        }
+.loading-text {
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+}
 
-        /* Cards de rutas */
-        .route-cards {
-            position: absolute;
-            bottom: 160px;
-            left: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-        }
+/* Controles de rutas */
+.route-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+    min-width: 120px;
+    border: 3px solid #e0e0e0;
+    scroll-snap-align: start;
+}
 
-        .route-card {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            flex: 1;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 3px solid;
-        }
+.control-btn {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    color: #666;
+    font-size: 12px;
+    font-weight: 600;
+}
 
-        .route-card.green {
-            border-color: #4CAF50;
-        }
+.control-btn:hover {
+    background: #f5f5f5;
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
 
-        .route-card.orange {
-            border-color: #FF9800;
-        }
+.control-btn.active {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
 
-        .route-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+.show-all-btn {
+    gap: 6px;
+}
 
-        .route-title {
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 4px 12px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+.minimize-btn svg {
+    margin: 0;
+}
 
-        .route-card.green .route-title {
-            background: #4CAF50;
-        }
+/* Cards de rutas */
+.route-cards {
+    position: absolute;
+    bottom: 100px;
+    left: 10px;
+    right: 10px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 10px 5px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    transition: all 0.3s ease;
+}
 
-        .route-card.orange .route-title {
-            background: #FF9800;
-        }
+.route-cards::-webkit-scrollbar {
+    display: none;
+}
 
-        .units-counter {
-            background: rgba(76, 175, 80, 0.1);
-            border-radius: 15px;
-            padding: 8px 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 12px;
-            border: 1px solid rgba(76, 175, 80, 0.2);
-        }
+.route-cards.minimized {
+    overflow: hidden;
+}
 
-        .route-card.orange .units-counter {
-            background: rgba(255, 152, 0, 0.1);
-            border: 1px solid rgba(255, 152, 0, 0.2);
-        }
+.route-cards.minimized .route-card {
+    display: none;
+}
 
-        .units-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4CAF50;
-            animation: pulse 2s infinite;
-        }
+.route-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    min-width: 280px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 3px solid;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    scroll-snap-align: start;
+    opacity: 1;
+}
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
+.route-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
 
-        .route-info {
-            font-size: 14px;
-            color: #333;
-        }
+.route-card.active-filter {
+    border-width: 4px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02);
+}
 
-        .route-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
+.route-card.green {
+    border-color: #4CAF50;
+}
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #4CAF50;
-        }
+.route-card.orange {
+    border-color: #FF9800;
+}
 
-        .route-location {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 4px 0;
-        }
+.route-card.blue {
+    border-color: #2196F3;
+}
 
-        .location-icon {
-            width: 12px;
-            height: 12px;
-            background: #666;
-            border-radius: 2px;
-        }
+.route-card.purple {
+    border-color: #9C27B0;
+}
 
-        .location-text {
-            font-size: 13px;
-            color: #666;
-        }
+.route-card.red {
+    border-color: #F44336;
+}
 
-        .location-value {
-            font-size: 13px;
-            color: #333;
-            font-weight: 500;
-        }
+.route-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
 
-        /* Líneas de ruta personalizadas */
-        .route-line-green {
-            stroke: #4CAF50 !important;
-            stroke-width: 4 !important;
-        }
+.route-title {
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
 
-        .route-line-orange {
-            stroke: #FF9800 !important;
-            stroke-width: 4 !important;
-        }
+.filter-route-btn {
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    flex-shrink: 0;
+}
 
-        /* Marcadores personalizados */
-        .custom-marker {
-            background: white;
-            border: 3px solid #FF5722;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.filter-route-btn:hover {
+    background: #f5f5f5;
+    border-color: #4CAF50;
+    color: #4CAF50;
+}
 
-        .custom-marker.red {
-            border-color: #FF5722;
-            background: #FF5722;
-        }
+.route-card.active-filter .filter-route-btn {
+    background: #4CAF50;
+    border-color: #4CAF50;
+    color: white;
+}
 
-        .custom-marker.white {
-            border-color: #ddd;
-            background: white;
-        }
+.route-info {
+    font-size: 14px;
+    color: #333;
+}
 
-        .custom-marker.user {
-            border-color: #2196F3;
-            background: #2196F3;
-            box-shadow: 0 0 0 10px rgba(33, 150, 243, 0.3);
-            animation: userPulse 2s infinite;
-        }
+.route-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #666;
+}
 
-        @keyframes userPulse {
-            0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
-        }
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: statusPulse 2s infinite;
+}
 
-        /* Estilos para ocultar controles de Leaflet no deseados */
-        .leaflet-control-container {
-            display: none;
-        }
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
 
-        /* Personalizar popup */
-        .leaflet-popup-content-wrapper {
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
+.route-schedule {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #666;
+}
 
-       
+.route-location {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 6px 0;
+}
+
+.location-icon {
+    width: 12px;
+    height: 12px;
+    background: #666;
+    border-radius: 2px;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.location-text {
+    font-size: 12px;
+    color: #999;
+}
+
+.location-value {
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+}
+
+.route-details {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.route-details span {
+    font-size: 12px;
+    color: #666;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.units-counter {
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.units-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Marcadores personalizados */
+.custom-marker {
+    background: white;
+    border: 3px solid #FF5722;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-marker.red {
+    border-color: #FF5722;
+    background: #FF5722;
+}
+
+.custom-marker.white {
+    border-color: #ddd;
+    background: white;
+}
+
+.custom-marker.user {
+    border-color: #2196F3;
+    background: #2196F3;
+    box-shadow: 0 0 0 10px rgba(33, 150, 243, 0.3);
+    animation: userPulse 2s infinite;
+}
+
+@keyframes userPulse {
+    0% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(33, 150, 243, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(33, 150, 243, 0); }
+}
+
+.custom-marker.start,
+.custom-marker.end {
+    animation: markerBounce 1s ease-in-out infinite;
+}
+
+@keyframes markerBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Ocultar controles de Leaflet */
+.leaflet-control-container {
+    display: none;
+}
+
+/* Personalizar popup */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+}
+
+.leaflet-popup-content {
+    margin: 8px 12px;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .route-cards {
+        bottom: 90px;
+        left: 5px;
+        right: 5px;
+    }
+    
+    .route-card {
+        min-width: 250px;
+    }
+    
+    .route-controls {
+        min-width: 110px;
+        padding: 14px;
+    }
+    
+    .control-btn {
+        padding: 8px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-card {
+        min-width: 220px;
+        padding: 12px;
+    }
+    
+    .route-title {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+    
+    .route-info {
+        font-size: 12px;
+    }
+    
+    .location-value {
+        font-size: 12px;
+    }
+    
+    .modal-content {
+        max-width: 300px;
+        padding: 20px;
+    }
+    
+    .route-controls {
+        min-width: 100px;
+        padding: 12px;
+        gap: 6px;
+    }
+    
+    .control-btn {
+        padding: 8px;
+        font-size: 10px;
+    }
+    
+    .show-all-btn span {
+        font-size: 10px;
+    }
+}
