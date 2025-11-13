@@ -155,42 +155,58 @@ class UIManager {
     }
 
     // Editar ruta
-    editRoute(routeIndex) {
+    async editRoute(routeIndex) {
         const route = this.routeManager.getRoute(routeIndex);
         if (!route) return;
-        
-        // Llenar formulario con datos de la ruta
-        window.formManager.fillFormWithRoute(route);
-        
-        // Eliminar la ruta original
-        this.routeManager.deleteRoute(routeIndex, false);
-        
-        // Mostrar la ruta en el mapa para edición
-        if (route.routeGeometry) {
-            window.mapManager.displayPreviewRoute({
-                features: [{
-                    geometry: {
-                        coordinates: route.routeGeometry
-                    },
-                    properties: {
-                        segments: [{
-                            distance: route.distance * 1000,
-                            duration: route.duration * 60
-                        }]
-                    }
-                }]
-            }, route.paradas.map(p => [p.lng, p.lat]));
+
+        try {
+            // Llenar formulario con datos de la ruta
+            window.formManager.fillFormWithRoute(route);
+
+            // Eliminar la ruta original del backend
+            await this.routeManager.deleteRoute(route.id, false);
+
+            // Mostrar la ruta en el mapa para edición
+            if (route.routeGeometry) {
+                window.mapManager.displayPreviewRoute({
+                    features: [{
+                        geometry: {
+                            coordinates: route.routeGeometry
+                        },
+                        properties: {
+                            segments: [{
+                                distance: route.distance * 1000,
+                                duration: route.duration * 60
+                            }]
+                        }
+                    }]
+                }, route.paradas.map(p => [p.lng, p.lat]));
+            }
+
+            this.displayRoutes();
+            this.showSuccess('Ruta cargada para edición');
+        } catch (error) {
+            this.showError(`Error al editar la ruta: ${error.message}`);
         }
-        
-        this.displayRoutes();
-        this.showSuccess('Ruta cargada para edición');
     }
 
     // Eliminar ruta
-    deleteRoute(routeIndex) {
-        if (this.routeManager.deleteRoute(routeIndex)) {
-            this.displayRoutes();
-            this.showSuccess('Ruta eliminada correctamente');
+    async deleteRoute(routeIndex) {
+        const route = this.routeManager.getRoute(routeIndex);
+        if (!route) return;
+
+        try {
+            this.showLoading(true, 'Eliminando ruta...');
+            const deleted = await this.routeManager.deleteRoute(route.id);
+
+            if (deleted) {
+                this.displayRoutes();
+                this.showSuccess('Ruta eliminada correctamente');
+            }
+        } catch (error) {
+            this.showError(`Error al eliminar la ruta: ${error.message}`);
+        } finally {
+            this.showLoading(false);
         }
     }
 

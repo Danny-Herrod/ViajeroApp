@@ -64,17 +64,17 @@ function showTestUsers() {
     }
 }
 
-// Función para redirigir al mapa
-function redirectToMap() {
+// Función para redirigir a home
+function redirectToHome() {
     // Mostrar mensaje de carga
     const loginButton = document.querySelector('.login-button');
     const originalText = loginButton.textContent;
     loginButton.textContent = 'Redirigiendo...';
     loginButton.disabled = true;
-    
+
     // Redirigir después de un breve delay para mejor UX
     setTimeout(() => {
-        window.location.href = './mapa.html';
+        window.location.href = './home.html';
     }, 1500);
 }
 
@@ -106,8 +106,8 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         document.getElementById('email').value = '';
         document.getElementById('password').value = '';
         
-        // Redirigir automáticamente al mapa
-        redirectToMap();
+        // Redirigir automáticamente a home
+        redirectToHome();
         
     } else {
         if (users.length === 0) {
@@ -142,7 +142,7 @@ if (currentUser) {
     
     // Si ya hay una sesión activa, redirigir automáticamente
     setTimeout(() => {
-        redirectToMap();
+        redirectToHome();
     }, 2000);
 }
 

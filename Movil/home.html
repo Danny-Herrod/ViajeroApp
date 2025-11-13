@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Home - NextStop</title>
+    <link rel="stylesheet" href="./css/nav/nav.css">
+    <link rel="stylesheet" href="./css/home/home.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header con patrón de puntos -->
+        <div class="header-pattern"></div>
+
+        <!-- Contenido principal -->
+        <div class="main-content">
+            <!-- Header con saludo y perfil -->
+            <header class="home-header">
+                <div class="greeting-section">
+                    <h1 class="greeting-title">Hola, <span id="userName">Usuario</span></h1>
+                    <p class="greeting-subtitle">¿A dónde vamos hoy?</p>
+                </div>
+                <div class="profile-avatar" id="profileAvatar">
+                    <img id="profileImage" style="display:none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                    <svg id="profileIcon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </div>
+            </header>
+
+            <!-- Próximo Bus -->
+            <section class="next-bus-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <svg class="title-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                        </svg>
+                        Próxima Salida
+                    </h2>
+                </div>
+
+                <div class="next-bus-card" id="nextBusCard">
+                    <div class="bus-route">
+                        <div class="route-point start-point">
+                            <div class="point-dot"></div>
+                            <span class="point-label" id="busOrigin">Castillo</span>
+                        </div>
+                        <div class="route-line">
+                            <div class="route-line-animated"></div>
+                        </div>
+                        <div class="route-point end-point">
+                            <div class="point-dot"></div>
+                            <span class="point-label" id="busDestination">Managua</span>
+                        </div>
+                    </div>
+                    <div class="bus-details">
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                            </svg>
+                            <span id="busTime">5:00 am</span>
+                        </div>
+                        <div class="detail-item">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <span id="busStation">Cotran Sur</span>
+                        </div>
+                    </div>
+                    <div class="bus-status-badge" id="busStatus">
+                        <div class="status-indicator"></div>
+                        <span>Sale en 1h 30m</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accesos Rápidos -->
+            <section class="quick-access-section">
+                <div class="section-header">
+                    <h2 class="section-title">Accesos Rápidos</h2>
+                </div>
+
+                <div class="quick-access-grid">
+                    <div class="quick-card" data-action="buses">
+                        <div class="quick-card-icon bus-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-card-content">
+                            <h3 class="quick-card-title">Horarios</h3>
+                            <p class="quick-card-description">Ver salidas y entradas</p>
+                        </div>
+                        <div class="quick-card-arrow">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="quick-card" data-action="viajar">
+                        <div class="quick-card-icon walk-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L8 8.5V13h2V9.6l-.2-.7z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-card-content">
+                            <h3 class="quick-card-title">Planificar Viaje</h3>
+                            <p class="quick-card-description">Rutas inteligentes</p>
+                        </div>
+                        <div class="quick-card-arrow">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="quick-card" data-action="mapa">
+                        <div class="quick-card-icon map-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </div>
+                        <div class="quick-card-content">
+                            <h3 class="quick-card-title">Mapa</h3>
+                            <p class="quick-card-description">Explorar ubicaciones</p>
+                        </div>
+                        <div class="quick-card-arrow">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estadísticas Rápidas -->
+            <section class="stats-section">
+                <div class="section-header">
+                    <h2 class="section-title">Resumen de Hoy</h2>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-value" id="statBuses">12</p>
+                            <p class="stat-label">Buses activos</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-value" id="statRoutes">8</p>
+                            <p class="stat-label">Rutas disponibles</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-value" id="statDepartures">5</p>
+                            <p class="stat-label">Próximas salidas</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Información Adicional -->
+            <section class="info-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <svg class="title-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                        </svg>
+                        Información Útil
+                    </h2>
+                </div>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                            </svg>
+                            <h3 class="info-card-title">Horarios</h3>
+                        </div>
+                        <p class="info-card-text">Primera salida: <strong>5:00 AM</strong></p>
+                        <p class="info-card-text">Última salida: <strong>6:00 PM</strong></p>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-header">
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                            </svg>
+                            <h3 class="info-card-title">Tarifas</h3>
+                        </div>
+                        <p class="info-card-text">Desde <strong>C$ 50</strong> hasta <strong>C$ 150</strong></p>
+                        <p class="info-card-text">Depende del destino</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Barra de navegación inferior -->
+        <div class="bottom-nav-container">
+            <div class="navigation-container">
+                <nav class="nav-bar">
+                    <!-- Inicio -->
+                    <div class="nav-item active" data-nav="home" data-label="Home">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
+                        <span class="nav-label">Inicio</span>
+                    </div>
+
+                    <!-- Ubicación -->
+                    <div class="nav-item" data-nav="location" data-label="Location">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                        <span class="nav-label">Mapa</span>
+                    </div>
+
+                    <!-- Persona caminando -->
+                    <div class="nav-item" data-nav="walk" data-label="Walk">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L8 8.5V13h2V9.6l-.2-.7z"/>
+                        </svg>
+                        <span class="nav-label">Viajar</span>
+                    </div>
+
+                    <!-- Bus -->
+                    <div class="nav-item" data-nav="bus" data-label="Bus">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M4 16c0 .88.39 1.67 1 2.22V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1.78c.61-.55 1-1.34 1-2.22V6c0-3.5-3.58-4-8-4s-8 .5-8 4v10zm3.5 1c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H6V6h12v5z"/>
+                        </svg>
+                        <span class="nav-label">Buses</span>
+                    </div>
+
+                    <!-- Ajustes -->
+                    <div class="nav-item" data-nav="settings" data-label="Settings">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"/>
+                        </svg>
+                        <span class="nav-label">Ajustes</span>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Modal de Perfil -->
+        <div class="modal" id="profileModal">
+            <div class="modal-overlay" id="profileModalOverlay"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Mi Perfil</h3>
+                    <button class="modal-close" id="profileModalClose">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="profile-avatar-large">
+                        <img id="profileImageLarge" style="display:none; width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        <svg id="profileIconLarge" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h3 class="profile-name" id="profileName">Usuario</h3>
+                    <p class="profile-email" id="profileEmail">usuario@example.com</p>
+
+                    <div class="profile-stats">
+                        <div class="profile-stat-item">
+                            <p class="profile-stat-value" id="profileTrips">0</p>
+                            <p class="profile-stat-label">Viajes realizados</p>
+                        </div>
+                        <div class="profile-stat-item">
+                            <p class="profile-stat-value" id="profileFavorites">0</p>
+                            <p class="profile-stat-label">Rutas guardadas</p>
+                        </div>
+                    </div>
+
+                    <button class="profile-action-btn" id="goToSettingsBtn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm7-7H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-1.75 9c0 .23-.02.46-.05.68l1.48 1.16c.13.11.17.3.08.45l-1.4 2.42c-.09.15-.27.21-.43.15l-1.74-.7c-.36.28-.76.51-1.18.69l-.26 1.85c-.03.17-.18.3-.35.3h-2.8c-.17 0-.32-.13-.35-.29l-.26-1.85c-.43-.18-.82-.41-1.18-.69l-1.74.7c-.16.06-.34 0-.43-.15l-1.4-2.42c-.09-.15-.05-.34.08-.45l1.48-1.16c-.03-.23-.05-.46-.05-.69 0-.23.02-.46.05-.68l-1.48-1.16c-.13-.11-.17-.3-.08-.45l1.4-2.42c.09-.15.27-.21.43-.15l1.74.7c.36-.28.76-.51 1.18-.69l.26-1.85c.03-.17.18-.3.35-.3h2.8c.17 0 .32.13.35.29l.26 1.85c.43.18.82.41 1.18.69l1.74-.7c.16-.06.34 0 .43.15l1.4 2.42c.09.15.05.34-.08.45l-1.48 1.16c.03.23.05.46.05.69z"/>
+                        </svg>
+                        Ir a Ajustes
+                    </button>
+
+                    <button class="profile-logout-btn" id="logoutBtn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                        </svg>
+                        Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/nav/navigation.js"></script>
+    <script src="./js/nav/nav.js"></script>
+    <script src="./js/home/home.js"></script>
+</body>
+</html>

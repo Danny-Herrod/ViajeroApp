@@ -181,29 +181,43 @@ function isInJinotega(lat, lng) {
            lng >= jinotegaBounds.west;
 }
 
-// Cargar todas las rutas
+// Cargar todas las rutas desde el backend
 async function loadRoutes() {
     try {
-        const routeFiles = ['Homero.json'];
-        
-        for (const file of routeFiles) {
-            try {
-                const response = await fetch(`./rutas/${file}`);
-                if (response.ok) {
-                    const routeData = await response.json();
-                    if (Array.isArray(routeData) && routeData.length > 0) {
-                        routes.push(routeData[0]);
-                    }
-                }
-            } catch (error) {
-                console.error(`Error cargando ruta ${file}:`, error);
-            }
+        // URL del backend (FastAPI)
+        const backendUrl = 'http://127.0.0.1:8000/rutas';
+
+        console.log('Cargando rutas desde backend:', backendUrl);
+
+        const response = await fetch(backendUrl);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
-        console.log('Rutas cargadas:', routes);
+
+        const routesData = await response.json();
+
+        console.log('Respuesta del backend:', routesData);
+
+        if (Array.isArray(routesData)) {
+            routes = routesData;
+            console.log(`✅ ${routes.length} rutas cargadas desde el backend`);
+        } else {
+            console.error('❌ El formato de respuesta no es un array:', routesData);
+            routes = [];
+        }
+
         return routes;
     } catch (error) {
-        console.error('Error cargando rutas:', error);
+        console.error('❌ Error cargando rutas desde el backend:', error);
+        console.error('Asegúrate de que:');
+        console.error('1. El backend esté ejecutándose (python main.py)');
+        console.error('2. El backend esté en http://127.0.0.1:8000');
+        console.error('3. XAMPP MySQL esté activo');
+
+        // Intentar mostrar un mensaje al usuario
+        showErrorNotification('No se pudieron cargar las rutas. Verifica que el backend esté activo.');
+
         return [];
     }
 }
@@ -614,34 +628,73 @@ function updateActiveUnits() {
 
 setInterval(updateActiveUnits, 30000);
 
-const navItems = document.querySelectorAll('.nav-item');
+// Función para mostrar notificación de error
+function showErrorNotification(message) {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = 'error-notification';
+    notification.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff5252;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            max-width: 90%;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        ">
+            ⚠️ ${message}
+        </div>
+    `;
 
-navItems.forEach(item => {
-    item.addEventListener('click', function() {
-        navItems.forEach(nav => nav.classList.remove('active'));
-        this.classList.add('active');
-        
-        const navType = this.getAttribute('data-nav');
-        
-        switch(navType) {
-            case 'home':
-                window.location.href = './index.html';
-                break;
-            case 'location':
-                if (userLocation && userMarker) {
-                    map.setView([userLocation.lat, userLocation.lng], 16);
-                }
-                break;
-            case 'walk':
-                break;
-            case 'bus':
-                showAllRoutes();
-                break;
-            case 'settings':
-                break;
+    document.body.appendChild(notification);
+
+    // Remover después de 5 segundos
+    setTimeout(() => {
+        notification.style.animation = 'slideUp 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 5000);
+}
+
+// Agregar estilos de animación
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideDown {
+        from {
+            transform: translateX(-50%) translateY(-100px);
+            opacity: 0;
         }
-    });
-});
+        to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(-50%) translateY(-100px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+
 
 function trackUserLocation() {
     if (!navigator.geolocation) return;

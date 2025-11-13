@@ -7,6 +7,7 @@ class BusRouteApp {
         this.formManager = null;
         this.routeManager = null;
         this.uiManager = null;
+        this.apiService = null;
     }
 
     // Inicializar la aplicación
@@ -16,29 +17,42 @@ class BusRouteApp {
             this.locationService = new LocationService();
             this.routeCalculator = new RouteCalculator();
             this.mapManager = new MapManager();
-            
+            this.apiService = new APIService();
+
             // Inicializar gestores
             this.formManager = new FormManager(this.mapManager, this.locationService);
-            this.routeManager = new RouteManager(this.mapManager, this.routeCalculator);
+            this.routeManager = new RouteManager(this.mapManager, this.routeCalculator, this.apiService);
             this.uiManager = new UIManager(this.routeManager);
-            
+
             // Hacer disponibles globalmente para compatibilidad
             window.mapManager = this.mapManager;
             window.formManager = this.formManager;
             window.routeManager = this.routeManager;
             window.uiManager = this.uiManager;
-            
+            window.apiService = this.apiService;
+
             // Inicializar mapa
             this.mapManager.initMap();
-            
+
+            // Verificar conexión con backend
+            const backendConnected = await this.routeManager.checkBackendConnection();
+            if (backendConnected) {
+                console.log('✅ Conectado al backend');
+                // Cargar rutas desde el backend
+                await this.routeManager.loadRoutesFromBackend();
+            } else {
+                console.warn('⚠️ No se pudo conectar al backend. Asegúrate de que esté ejecutándose.');
+                alert('No se pudo conectar al backend.\n\nAsegúrate de ejecutar:\ncd backend\npython main.py');
+            }
+
             // Configurar eventos
             this.setupEvents();
-            
+
             // Inicializar UI
             this.uiManager.displayRoutes();
             this.uiManager.addImportExportButtons();
             this.uiManager.setupUIEvents();
-            
+
             console.log('✅ Bus Route App inicializada correctamente');
         } catch (error) {
             console.error('❌ Error al inicializar la aplicación:', error);

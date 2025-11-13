@@ -1,0 +1,510 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #FFBB00 0%, #FFA500 100%);
+    height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+/* Imagen de fondo del header */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 120px;
+    pointer-events: none;
+    background-image: url('../../assets/esquina2.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center top;
+    opacity: 1;
+    z-index: 1;
+}
+
+/* Header con patrón de puntos */
+.header-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(135deg, #FFBB00 0%, #FFA500 100%);
+    z-index: 0;
+}
+
+/* Container principal */
+.app-container {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Contenido principal */
+.main-content {
+    position: relative;
+    z-index: 2;
+    background: white;
+    border-radius: 40px 40px 0 0;
+    margin-top: 80px;
+    padding: 40px 24px 100px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Secciones */
+.section {
+    margin-bottom: 40px;
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 900;
+    color: #02003C;
+    text-align: center;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+}
+
+/* Tabs de navegación */
+.tabs-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    background: #E5E7EB;
+    color: #6B7280;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-button.active {
+    background: #FFBB00;
+    color: #FFFFFF;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(255, 187, 0, 0.3);
+}
+
+.tab-button:hover:not(.active) {
+    background: #D1D5DB;
+}
+
+/* Línea separadora debajo de tabs */
+.tab-separator {
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #FFBB00 0%, #FFA500 100%);
+    margin: 8px 0 20px;
+    border-radius: 2px;
+}
+
+/* Contenedor de filtros - Alineados con las columnas */
+.filters-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 60px;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.filter-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    background: #FFBB00;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(255, 187, 0, 0.2);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background: #FFA500;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(255, 187, 0, 0.3);
+}
+
+.filter-btn:active {
+    transform: translateY(0);
+}
+
+/* El último botón (Estado) debe ser más pequeño para alinearse con el círculo de estado */
+.filter-btn:last-child {
+    padding: 10px 8px;
+    font-size: 13px;
+}
+
+/* Lista de buses */
+.bus-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Card de bus */
+.bus-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #E5E7EB;
+    border-radius: 20px;
+    padding: 16px 20px;
+    transition: all 0.3s ease;
+}
+
+.bus-card:hover {
+    background: #D1D5DB;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Información del bus - Alineada con los filtros */
+.bus-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    flex: 1;
+    align-items: center;
+}
+
+.bus-origin,
+.bus-destination,
+.bus-time {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.bus-origin {
+    text-align: left;
+    padding-left: 0;
+}
+
+.bus-destination {
+    text-align: left;
+    padding-left: 8px;
+}
+
+.bus-time {
+    text-align: left;
+    padding-left: 8px;
+}
+
+/* Indicador de estado - Alineado con el botón Estado */
+.bus-status {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+.status-yellow {
+    background: #FFBB00;
+    box-shadow: 0 0 8px rgba(255, 187, 0, 0.5);
+}
+
+.status-green {
+    background: #10B981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.status-red {
+    background: #EF4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 32px 20px 40px;
+        margin-top: 70px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+
+    .tab-button {
+        font-size: 13px;
+        padding: 10px 16px;
+    }
+
+    .tab-button.active {
+        font-size: 14px;
+    }
+
+    .filters-container {
+        grid-template-columns: 1fr 1fr 1fr 55px;
+        gap: 6px;
+        padding-right: 18px;
+    }
+
+    .filter-btn {
+        font-size: 13px;
+        padding: 9px 14px;
+    }
+
+    .filter-btn:last-child {
+        padding: 9px 6px;
+        font-size: 12px;
+    }
+
+    .bus-info {
+        gap: 6px;
+    }
+
+    .bus-origin,
+    .bus-destination,
+    .bus-time {
+        font-size: 15px;
+    }
+
+    .bus-origin {
+        padding-left: 0;
+    }
+
+    .bus-destination {
+        padding-left: 6px;
+    }
+
+    .bus-time {
+        padding-left: 6px;
+    }
+
+    .bus-status {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-pattern {
+        height: 100px;
+    }
+
+    .main-content {
+        padding: 28px 16px 40px;
+        margin-top: 60px;
+        border-radius: 30px 30px 0 0;
+    }
+
+    .section {
+        margin-bottom: 32px;
+    }
+
+    .section-title {
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+
+    .tabs-container {
+        gap: 8px;
+    }
+
+    .tab-button {
+        font-size: 12px;
+        padding: 9px 12px;
+    }
+
+    .tab-button.active {
+        font-size: 13px;
+    }
+
+    .filters-container {
+        grid-template-columns: 1fr 1fr 1fr 50px;
+        gap: 5px;
+        padding-right: 16px;
+    }
+
+    .filter-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .filter-btn:last-child {
+        padding: 8px 5px;
+        font-size: 11px;
+    }
+
+    .bus-card {
+        padding: 14px 16px;
+        border-radius: 16px;
+    }
+
+    .bus-info {
+        gap: 5px;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .bus-origin,
+    .bus-destination,
+    .bus-time {
+        font-size: 14px;
+    }
+
+    .bus-origin {
+        padding-left: 0;
+    }
+
+    .bus-destination {
+        padding-left: 5px;
+    }
+
+    .bus-time {
+        padding-left: 5px;
+    }
+
+    .bus-status {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 375px) {
+    .main-content {
+        padding: 24px 12px 40px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
+
+    .tab-button {
+        font-size: 11px;
+        padding: 8px 10px;
+    }
+
+    .tab-button.active {
+        font-size: 12px;
+    }
+
+    .filters-container {
+        grid-template-columns: 1fr 1fr 1fr 45px;
+        gap: 4px;
+        padding-right: 14px;
+    }
+
+    .filter-btn {
+        font-size: 11px;
+        padding: 7px 10px;
+    }
+
+    .filter-btn:last-child {
+        padding: 7px 4px;
+        font-size: 10px;
+    }
+
+    .bus-card {
+        padding: 12px 14px;
+    }
+
+    .bus-info {
+        gap: 4px;
+    }
+
+    .bus-origin,
+    .bus-destination,
+    .bus-time {
+        font-size: 13px;
+    }
+
+    .bus-origin {
+        padding-left: 0;
+    }
+
+    .bus-destination {
+        padding-left: 4px;
+    }
+
+    .bus-time {
+        padding-left: 4px;
+    }
+
+    .bus-status {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media (max-width: 320px) {
+    .section-title {
+        font-size: 22px;
+    }
+
+    .tab-button {
+        font-size: 10px;
+        padding: 7px 8px;
+    }
+
+    .tab-button.active {
+        font-size: 11px;
+    }
+
+    .filters-container {
+        grid-template-columns: 1fr 1fr 1fr 40px;
+        gap: 3px;
+        padding-right: 12px;
+    }
+
+    .filter-btn {
+        font-size: 10px;
+        padding: 6px 8px;
+    }
+
+    .filter-btn:last-child {
+        padding: 6px 3px;
+        font-size: 9px;
+    }
+
+    .bus-origin,
+    .bus-destination,
+    .bus-time {
+        font-size: 12px;
+    }
+
+    .bus-origin {
+        padding-left: 0;
+    }
+
+    .bus-destination {
+        padding-left: 3px;
+    }
+
+    .bus-time {
+        padding-left: 3px;
+    }
+
+    .bus-status {
+        width: 12px;
+        height: 12px;
+    }
+}
